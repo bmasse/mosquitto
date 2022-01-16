@@ -1,0 +1,19 @@
+Pour compiler j'ai du faire
+
+sudo apt install libssl-dev
+sudo apt install libcjson-dev
+sudo apt install libwebsockets-dev
+sudo apt install xsltproc
+sudo apt install docbook-xsl
+build-essential.txt
+
+make
+
+J'ai ajouter les certificat et clef dans le répertoire
+ls ./CA 
+client.crt.txt  client.key  mosquitto.org.crt  mosquitto.org.der
+Il faut les ajouter sur le serveur de mosquitto.org.
+Voir la doc sur le site web. 
+https://mosquitto.org/ 
+section test 
+https://test.mosquitto.org/
