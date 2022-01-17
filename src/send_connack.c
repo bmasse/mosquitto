@@ -104,7 +104,7 @@ int send__connack(struct mosquitto *context, uint8_t ack, uint8_t reason_code, c
 		property__write_all(packet, connack_props, true);
 	}
 	mosquitto_property_free_all(&connack_props);
-
+BLog();
 	return packet__queue(context, packet);
 }
 

@@ -76,7 +76,7 @@ int send__auth(struct mosquitto *context, uint8_t reason_code, const void *auth_
 	packet__write_byte(packet, reason_code);
 	property__write_all(packet, properties, true);
 	mosquitto_property_free_all(&properties);
-
+BLog();
 	return packet__queue(context, packet);
 }
 
