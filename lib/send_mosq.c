@@ -159,7 +159,7 @@ int send__command_with_mid(struct mosquitto *mosq, uint8_t command, uint16_t mid
 			property__write_all(packet, properties, true);
 		}
 	}
-
+BLog();
 	return packet__queue(mosq, packet);
 }
 
@@ -181,7 +181,7 @@ int send__simple_command(struct mosquitto *mosq, uint8_t command)
 		mosquitto__free(packet);
 		return rc;
 	}
-
+BLog();
 	return packet__queue(mosq, packet);
 }
 

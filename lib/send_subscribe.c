@@ -96,7 +96,7 @@ int send__subscribe(struct mosquitto *mosq, int *mid, int topic_count, char *con
 		log__printf(mosq, MOSQ_LOG_DEBUG, "Client %s sending SUBSCRIBE (Mid: %d, Topic: %s, QoS: %d, Options: 0x%02x)", SAFE_PRINT(mosq->id), local_mid, topic[i], topic_qos&0x03, topic_qos&0xFC);
 	}
 #endif
-
+BLog();
 	return packet__queue(mosq, packet);
 }
 

@@ -124,7 +124,7 @@ int socks5__send(struct mosquitto *mosq)
 	struct mosquitto__packet *packet;
 	size_t slen;
 	uint8_t ulen, plen;
-
+BLog();
 	struct in_addr addr_ipv4;
 	struct in6_addr addr_ipv6;
 	int ipv4_pton_result;

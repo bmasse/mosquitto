@@ -98,7 +98,9 @@ int mosquitto_lib_cleanup(void)
 
 	return MOSQ_ERR_SUCCESS;
 }
-
+/*
+Benoit Alloue la struct mosquitto et la nettoie 
+*/
 struct mosquitto *mosquitto_new(const char *id, bool clean_start, void *userdata)
 {
 	struct mosquitto *mosq = NULL;
@@ -199,6 +201,9 @@ int mosquitto_reinitialise(struct mosquitto *mosq, const char *id, bool clean_st
 #ifdef WITH_TLS
 	mosq->ssl = NULL;
 	mosq->ssl_ctx = NULL;
+	BTraceIn
+	BLog("true, true");
+	BLog("***********************************************");
 	mosq->ssl_ctx_defaults = true;
 	mosq->tls_cert_reqs = SSL_VERIFY_PEER;
 	mosq->tls_insecure = false;

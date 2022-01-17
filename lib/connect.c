@@ -15,7 +15,6 @@ SPDX-License-Identifier: EPL-2.0 OR BSD-3-Clause
 Contributors:
    Roger Light - initial implementation and documentation.
 */
-
 #include "config.h"
 
 #include <string.h>
@@ -42,7 +41,7 @@ static int mosquitto__connect_init(struct mosquitto *mosq, const char *host, int
 {
 	int i;
 	int rc;
-
+BTraceIn
 	if(!mosq) return MOSQ_ERR_INVAL;
 	if(!host || port < 0 || port > UINT16_MAX) return MOSQ_ERR_INVAL;
 	if(keepalive != 0 && (keepalive < 5 || keepalive > UINT16_MAX)) return MOSQ_ERR_INVAL;
@@ -76,7 +75,8 @@ static int mosquitto__connect_init(struct mosquitto *mosq, const char *host, int
 	mosq->msgs_in.inflight_quota = mosq->msgs_in.inflight_maximum;
 	mosq->msgs_out.inflight_quota = mosq->msgs_out.inflight_maximum;
 	mosq->retain_available = 1;
-
+	BLog("port = %d\n", mosq->port); // Benoit
+	BTraceOut
 	return MOSQ_ERR_SUCCESS;
 }
 
@@ -95,7 +95,7 @@ int mosquitto_connect_bind(struct mosquitto *mosq, const char *host, int port, i
 int mosquitto_connect_bind_v5(struct mosquitto *mosq, const char *host, int port, int keepalive, const char *bind_address, const mosquitto_property *properties)
 {
 	int rc;
-
+	BTraceIn
 	if(bind_address){
 		rc = mosquitto_string_option(mosq, MOSQ_OPT_BIND_ADDRESS, bind_address);
 		if(rc) return rc;
@@ -103,6 +103,7 @@ int mosquitto_connect_bind_v5(struct mosquitto *mosq, const char *host, int port
 
 	mosquitto_property_free_all(&mosq->connect_properties);
 	if(properties){
+		BLog("properties");
 		rc = mosquitto_property_check_all(CMD_CONNECT, properties);
 		if(rc) return rc;
 
@@ -115,7 +116,7 @@ int mosquitto_connect_bind_v5(struct mosquitto *mosq, const char *host, int port
 	if(rc) return rc;
 
 	mosquitto__set_state(mosq, mosq_cs_new);
-
+	BTraceOut
 	return mosquitto__reconnect(mosq, true);
 }
 
@@ -159,11 +160,12 @@ static int mosquitto__reconnect(struct mosquitto *mosq, bool blocking)
 	const mosquitto_property *outgoing_properties = NULL;
 	mosquitto_property local_property;
 	int rc;
-
+	BTraceIn
 	if(!mosq) return MOSQ_ERR_INVAL;
 	if(!mosq->host) return MOSQ_ERR_INVAL;
 
 	if(mosq->connect_properties){
+		BLog("Pas supporté pour mqtt antérieur à 5");
 		if(mosq->protocol != mosq_p_mqtt5) return MOSQ_ERR_NOT_SUPPORTED;
 
 		if(mosq->connect_properties->client_generated){
@@ -196,11 +198,14 @@ static int mosquitto__reconnect(struct mosquitto *mosq, bool blocking)
     }
 
 #ifdef WITH_SOCKS
-	if(mosq->socks5_host){
+	if(mosq->socks5_host){ // jusqu'a maintenant c'est socks5_host = 0
+		BLog("mosq->socks5_host= %s, port = %d", mosq->socks5_host, mosq->socks5_port);
 		rc = net__socket_connect(mosq, mosq->socks5_host, mosq->socks5_port, mosq->bind_address, blocking);
 	}else
 #endif
 	{
+		BLog("mosq->host= %s, port = %d, %s, blocking %d", mosq->host, mosq->port, mosq->bind_address,
+		blocking);
 		rc = net__socket_connect(mosq, mosq->host, mosq->port, mosq->bind_address, blocking);
 	}
 	if(rc>0){
@@ -210,13 +215,14 @@ static int mosquitto__reconnect(struct mosquitto *mosq, bool blocking)
 
 #ifdef WITH_SOCKS
 	if(mosq->socks5_host){
-		mosquitto__set_state(mosq, mosq_cs_socks5_new);
+		mosquitto__set_state(mosq, mosq_cs_socks5_new);BTraceOut
 		return socks5__send(mosq);
 	}else
 #endif
 	{
+		BLog("send_connect");
 		mosquitto__set_state(mosq, mosq_cs_connected);
-		rc = send__connect(mosq, mosq->keepalive, mosq->clean_start, outgoing_properties);
+		rc = send__connect(mosq, mosq->keepalive, mosq->clean_start, outgoing_properties);BTraceOut
 		if(rc){
 			packet__cleanup_all(mosq);
 			net__socket_close(mosq);

@@ -49,7 +49,7 @@ int send__connect(struct mosquitto *mosq, uint16_t keepalive, bool clean_session
 	uint16_t receive_maximum;
 
 	assert(mosq);
-
+	BLog("send__connect");
 	if(mosq->protocol == mosq_p_mqtt31 && !mosq->id) return MOSQ_ERR_PROTOCOL;
 
 #if defined(WITH_BROKER) && defined(WITH_BRIDGE)
@@ -69,6 +69,7 @@ int send__connect(struct mosquitto *mosq, uint16_t keepalive, bool clean_session
 #endif
 
 	if(mosq->protocol == mosq_p_mqtt5){
+		printf("Benoit: mosq->protocol == mosq_p_mqtt5\n");
 		/* Generate properties from options */
 		if(!mosquitto_property_read_int16(properties, MQTT_PROP_RECEIVE_MAXIMUM, &receive_maximum, false)){
 			rc = mosquitto_property_add_int16(&local_props, MQTT_PROP_RECEIVE_MAXIMUM, mosq->msgs_in.inflight_maximum);
@@ -86,12 +87,15 @@ int send__connect(struct mosquitto *mosq, uint16_t keepalive, bool clean_session
 		varbytes = packet__varint_bytes(proplen);
 		headerlen += proplen + varbytes;
 	}else if(mosq->protocol == mosq_p_mqtt311){
+		printf("Benoit: ICI: mosq->protocol == mosq_p_mqtt311\n");
 		version = MQTT_PROTOCOL_V311;
 		headerlen = 10;
 	}else if(mosq->protocol == mosq_p_mqtt31){
+		printf("Benoit: mosq->protocol == mosq_p_mqtt31\n");
 		version = MQTT_PROTOCOL_V31;
 		headerlen = 12;
 	}else{
+		printf("Benoit: mosq->protocol == MOSQ_ERR_INVAL\n");
 		return MOSQ_ERR_INVAL;
 	}
 

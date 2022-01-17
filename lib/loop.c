@@ -169,6 +169,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 			if(mosq->sock != INVALID_SOCKET && FD_ISSET(mosq->sock, &writefds)){
 #ifdef WITH_TLS
 				if(mosq->want_connect){
+					BLog("Loop call net__socket_connect_tls");
 					rc = net__socket_connect_tls(mosq);
 					if(rc) return rc;
 				}else
@@ -320,6 +321,7 @@ int mosquitto_loop_forever(struct mosquitto *mosq, int timeout, int max_packets)
 				if(state == mosq_cs_disconnecting || state == mosq_cs_disconnected){
 					run = 0;
 				}else{
+					BLog();
 					rc = mosquitto_reconnect(mosq);
 				}
 			}
@@ -373,6 +375,7 @@ int mosquitto_loop_read(struct mosquitto *mosq, int max_packets)
 
 #ifdef WITH_TLS
 	if(mosq->want_connect){
+		BLog("Loop call net__socket_connect_tls");
 		rc = net__socket_connect_tls(mosq);
 		if (MOSQ_ERR_TLS == rc){
 			rc = mosquitto__loop_rc_handle(mosq, rc);

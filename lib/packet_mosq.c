@@ -146,7 +146,7 @@ int packet__queue(struct mosquitto *mosq, struct mosquitto__packet *packet)
 #endif
 	assert(mosq);
 	assert(packet);
-
+	BLog("");
 	packet->pos = 0;
 	packet->to_process = packet->packet_length;
 
@@ -185,8 +185,10 @@ int packet__queue(struct mosquitto *mosq, struct mosquitto__packet *packet)
 	}
 
 	if(mosq->in_callback == false && mosq->threaded == mosq_ts_none){
+		printf("Benoit: if(mosq->in_callback == false && mosq->threaded == mosq_ts_none)\n");
 		return packet__write(mosq);
 	}else{
+		printf("Benoit: FAUX if(mosq->in_callback == false && mosq->threaded == mosq_ts_none)\n");
 		return MOSQ_ERR_SUCCESS;
 	}
 #endif
@@ -238,12 +240,14 @@ int packet__write(struct mosquitto *mosq)
 	state = mosquitto__get_state(mosq);
 #if defined(WITH_TLS) && !defined(WITH_BROKER)
 	if(state == mosq_cs_connect_pending || mosq->want_connect){
+		printf("Benoit: state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d\n", state, mosq_cs_connect_pending, mosq->want_connect);
 #else
 	if(state == mosq_cs_connect_pending){
 #endif
 		pthread_mutex_unlock(&mosq->current_out_packet_mutex);
 		return MOSQ_ERR_SUCCESS;
 	}
+	printf("Benoit: state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d\n", state, mosq_cs_connect_pending, mosq->want_connect);
 
 	while(mosq->current_out_packet){
 		packet = mosq->current_out_packet;

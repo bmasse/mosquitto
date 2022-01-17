@@ -270,7 +270,9 @@ int mosquitto_tls_insecure_set(struct mosquitto *mosq, bool value)
 	return MOSQ_ERR_NOT_SUPPORTED;
 #endif
 }
-
+/*
+Benoit Valide les options
+*/
 
 int mosquitto_string_option(struct mosquitto *mosq, enum mosq_opt_t option, const char *value)
 {
@@ -421,7 +423,8 @@ int mosquitto_opts_set(struct mosquitto *mosq, enum mosq_opt_t option, void *val
 int mosquitto_int_option(struct mosquitto *mosq, enum mosq_opt_t option, int value)
 {
 	if(!mosq) return MOSQ_ERR_INVAL;
-
+	BTraceIn;
+	BLog("Option: %d", option);
 	switch(option){
 		case MOSQ_OPT_PROTOCOL_VERSION:
 			if(value == MQTT_PROTOCOL_V31){
@@ -460,8 +463,10 @@ int mosquitto_int_option(struct mosquitto *mosq, enum mosq_opt_t option, int val
 		case MOSQ_OPT_SSL_CTX_WITH_DEFAULTS:
 #if defined(WITH_TLS) && OPENSSL_VERSION_NUMBER >= 0x10100000L
 			if(value){
+				BLog("On met l'option mosq->ssl_ctx_defaults a true");
 				mosq->ssl_ctx_defaults = true;
 			}else{
+				BLog("On met l'option mosq->ssl_ctx_defaults a false");
 				mosq->ssl_ctx_defaults = false;
 			}
 			break;
@@ -472,8 +477,10 @@ int mosquitto_int_option(struct mosquitto *mosq, enum mosq_opt_t option, int val
 		case MOSQ_OPT_TLS_USE_OS_CERTS:
 #ifdef WITH_TLS
 			if(value){
+				BLog("On met l'option mosq->tls_use_os_certs a true");
 				mosq->tls_use_os_certs = true;
 			}else{
+				BLog("On met l'option mosq->tls_use_os_certs a false");
 				mosq->tls_use_os_certs = false;
 			}
 			break;
