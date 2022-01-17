@@ -28,6 +28,12 @@ client/mosquitto_sub
 client/testing
 client/testing.c
 
+ben/mosquitto_pub
+ben/mosquitto_rr
+ben/mosquitto_sub
+ben/testing
+ben/testing.c
+
 cov-int/
 
 dist/
@@ -85,3 +91,5 @@ test/unit/out/
 
 www/cache/
 __pycache__
+
+CMakeFiles

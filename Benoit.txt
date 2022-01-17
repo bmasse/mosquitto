@@ -17,3 +17,10 @@ Voir la doc sur le site web.
 https://mosquitto.org/ 
 section test 
 https://test.mosquitto.org/
+
+Étape 2
+config.h ajouter de débogue à la Benoit
+
+Étape 3
+Intégrer le répertoire ben.
+Copie du repertoire client avec du debogue.

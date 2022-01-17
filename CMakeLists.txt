@@ -118,8 +118,13 @@ option(WITH_BROKER "Build broker?" ON)
 option(WITH_APPS "Build apps?" ON)
 option(WITH_PLUGINS "Build plugins?" ON)
 option(DOCUMENTATION "Build documentation?" ON)
+option(WITH_BEN "Build clients avec Benoit?" ON)
 
 add_subdirectory(lib)
+if (WITH_BEN)
+	add_subdirectory(ben)
+endif (WITH_BEN)
+
 if (WITH_CLIENTS)
 	add_subdirectory(client)
 endif (WITH_CLIENTS)
