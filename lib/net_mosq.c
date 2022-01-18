@@ -444,7 +444,7 @@ static int net__try_connect_tcp(const char *host, uint16_t port, mosq_sock_t *so
 			continue;
 		}
 
-		if(bind_address){
+		if(bind_address){  // Benoit: Passe pas ici
 			BLog("pas ici");
 			for(rp_bind = ainfo_bind; rp_bind != NULL; rp_bind = rp_bind->ai_next){
 				if(bind(*sock, rp_bind->ai_addr, rp_bind->ai_addrlen) == 0){
@@ -640,18 +640,24 @@ static int net__tls_load_ca(struct mosquitto *mosq)
 		if(ret == 0){
 #  ifdef WITH_BROKER
 			if(mosq->tls_cafile && mosq->tls_capath){
+				BLog("Error: Unable to load CA certificates, check bridge_cafile \"%s\" and bridge_capath \"%s\".", mosq->tls_cafile, mosq->tls_capath);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check bridge_cafile \"%s\" and bridge_capath \"%s\".", mosq->tls_cafile, mosq->tls_capath);
 			}else if(mosq->tls_cafile){
+				BLog("Error: Unable to load CA certificates, check bridge_cafile \"%s\".", mosq->tls_cafile);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check bridge_cafile \"%s\".", mosq->tls_cafile);
 			}else{
+				BLog("Error: Unable to load CA certificates, check bridge_capath \"%s\".", mosq->tls_capath);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check bridge_capath \"%s\".", mosq->tls_capath);
 			}
 #  else
 			if(mosq->tls_cafile && mosq->tls_capath){
+				BLog("Error: Unable to load CA certificates, check bridge_cafile \"%s\" and bridge_capath \"%s\".", mosq->tls_cafile, mosq->tls_capath);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check cafile \"%s\" and capath \"%s\".", mosq->tls_cafile, mosq->tls_capath);
 			}else if(mosq->tls_cafile){
+				BLog("Error: Unable to load CA certificates, check bridge_cafile \"%s\".", mosq->tls_cafile);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check cafile \"%s\".", mosq->tls_cafile);
 			}else{
+				BLog("Error: Unable to load CA certificates, check bridge_capath \"%s\".", mosq->tls_capath);
 				log__printf(mosq, MOSQ_LOG_ERR, "Error: Unable to load CA certificates, check capath \"%s\".", mosq->tls_capath);
 			}
 #  endif
@@ -1008,7 +1014,7 @@ BTraceIn
 	if(!mosq || !host) return MOSQ_ERR_INVAL;
 	BLog(" host %s", host);
 
-	rc = net__try_connect(host, port, &mosq->sock, bind_address, blocking);
+	rc = net__try_connect(host, port, &mosq->sock, bind_address, blocking);  // Benoit: Ici on a une trace de wireshark.
 	if(rc > 0) return rc;
 
 	BLog("net__socket_connect %d", mosq->tcp_nodelay);

@@ -96,13 +96,13 @@ int mosquitto_connect_bind_v5(struct mosquitto *mosq, const char *host, int port
 {
 	int rc;
 	BTraceIn
-	if(bind_address){
+	if(bind_address){ // Benoit: On n'execute pas ce code
 		rc = mosquitto_string_option(mosq, MOSQ_OPT_BIND_ADDRESS, bind_address);
 		if(rc) return rc;
 	}
 
 	mosquitto_property_free_all(&mosq->connect_properties);
-	if(properties){
+	if(properties){  // Benoit: On n'execute pas ce code
 		BLog("properties");
 		rc = mosquitto_property_check_all(CMD_CONNECT, properties);
 		if(rc) return rc;
@@ -164,7 +164,7 @@ static int mosquitto__reconnect(struct mosquitto *mosq, bool blocking)
 	if(!mosq) return MOSQ_ERR_INVAL;
 	if(!mosq->host) return MOSQ_ERR_INVAL;
 
-	if(mosq->connect_properties){
+	if(mosq->connect_properties){ // Benoit: On n'execute pas ce code
 		BLog("Pas supporté pour mqtt antérieur à 5");
 		if(mosq->protocol != mosq_p_mqtt5) return MOSQ_ERR_NOT_SUPPORTED;
 
