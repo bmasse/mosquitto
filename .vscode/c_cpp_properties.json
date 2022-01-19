@@ -6,7 +6,11 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [
-                "WITH_TLS=1"
+                "WITH_TLS=1",
+                "WITH_THREADING",
+                "HAVE_PSELECT",
+
+                "NON_WITH_SRV"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
