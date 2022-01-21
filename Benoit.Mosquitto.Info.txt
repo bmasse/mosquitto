@@ -1,6 +1,7 @@
 1.1 Test avec 1883, 1884, 8883 et 8884
 1.2 Test pour mosquitto avec device comme AP
 1.3 Supprimer la compilation de mosquitto (src) et apps et pluging qui utilise WITH_BROKER ou ne sont pas utile
+1.4 Git commit 
 
 /******************************************************************************
     1.1 Test avec 1883, 1884, 8883 et 8884
@@ -176,5 +177,75 @@ mosquitto.org.der
 /******************************************************************************
     1.3 Supprimer la compilation de mosquitto (src) et apps et pluging qui utilise WITH_BROKER ou ne sont pas utile
  ******************************************************************************/
+Voir la liste des git commits
+Changement dans ./Makefile
 
 
+/******************************************************************************
+    1.4 Git commits
+ ******************************************************************************/
+
+*******************
+Référence dans ce document à 1.3 Supprimer la compilation de mosquitto (src) et apps et pluging qui utilise WITH_BROKER ou ne sont pas utile
+*******************
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 17:00:45 2022 -0500
+
+    Suppression des repertoires src, apps et plugins
+    
+    Ces repertoires ne sont pas utiles pour les apps clients
+
+commit b0c1eefa90ea75cfffb902b39eaffd93222cb9ab
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Tue Jan 18 20:11:11 2022 -0500
+
+    Mise a jour de la config c_cpp pour vscode
+
+commit 0de3930ac2c23eca80e06730886f9da45bbf7fdd (origin/b/build_ok_tests_ok, b/build_ok_tests_ok)
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Tue Jan 18 16:53:02 2022 -0500
+
+    Ajout de l'env VSCode pour mosquitto
+
+commit 9d05f1adc50485a06ec26aeb59c5135c61108e51
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Tue Jan 18 16:52:12 2022 -0500
+
+    Ajout de commentaires seulement
+
+commit cad1b42d169270a52c6ff37bf20852f8b244a7e9
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Sun Jan 16 22:14:41 2022 -0500
+
+    Ajout du repertoire ben image de client pour debogage
+    
+    Ajout de BLog() et autres code de debogage
+
+commit a3dd99c26c2d94235747fd7dfb57ab831f434b91
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Sun Jan 16 19:46:45 2022 -0500
+
+    Ajout de BLog dans les fichiers src/
+
+commit f55314e53ff508069ac23f6d35bc7847e20ae542
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Sun Jan 16 19:40:09 2022 -0500
+
+    Ajout de deboggage BLog, BTraceIn, BTraceOut... (config.h)
+    
+    Certains autres printf...
+    Aucun changement de fonctionnalites
+
+commit dfe077a011dc62ba202a7fda8f93b923d7099bfd
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Sun Jan 16 18:34:46 2022 -0500
+
+    Generer avec instruction Benoit.txt
+    
+    Exemple de tests avec les certificats et clefs dans le repertoire ./CA
+
+commit 3cbe805e71ac41a2a20cc9b2ea6b3b619f49554a (upstream/master, upstream/fixes, upstream/coverity-fixes, origin/master, origin/fixes, origin/coverity-fixes, origin/HEAD, master)
+Author: Roger A. Light <roger@atchoo.org>
+Date:   Wed Nov 17 00:30:52 2021 +0000
+
+    Update docker.
