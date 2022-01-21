@@ -93,3 +93,6 @@ www/cache/
 __pycache__
 
 CMakeFiles
+
+libmosquitto.pc 
+libmosquittopp.pc 
