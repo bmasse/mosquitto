@@ -272,7 +272,7 @@ int socks5__read(struct mosquitto *mosq)
 	uint8_t *payload;
 	uint8_t i;
 	enum mosquitto_client_state state;
-
+	exit(-1);
 	state = mosquitto__get_state(mosq);
 	if(state == mosq_cs_socks5_start){
 		while(mosq->in_packet.to_process > 0){

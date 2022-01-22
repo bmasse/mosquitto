@@ -1334,6 +1334,7 @@ int client_opts_set(struct mosquitto *mosq, struct mosq_config *cfg)
 	mosquitto_max_inflight_messages_set(mosq, cfg->max_inflight);
 #ifdef WITH_SOCKS
 	if(cfg->socks5_host){
+		exit(-1);
 		rc = mosquitto_socks5_set(mosq, cfg->socks5_host, cfg->socks5_port, cfg->socks5_username, cfg->socks5_password);
 		if(rc){
 			mosquitto_lib_cleanup();
