@@ -184,13 +184,37 @@ Changement dans ./Makefile
 /******************************************************************************
     1.4 Git commits
  ******************************************************************************/
- commit 81cb22e93f7458c012e5039a17692cf285e0d751 (HEAD -> b/Test_nettoiyer_le_tout)
+commit cf4b6d8389cafad385df9f1aded71500f487b282 (HEAD -> b/Test_nettoiyer_le_tout)
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 21:21:53 2022 -0500
+
+    Supprimer le repertoire client, le suivi se fait dans ben.
+
+commit aa42a779a36cc679f86c95156c4a1989ca8d531b
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 21:14:49 2022 -0500
+
+    VSCODE, Mise à jour des #define
+
+commit 659b969256e2452436307d9a1d0c0867b6789be4
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 21:13:48 2022 -0500
+
+    Supprimer les repertoire src, apps et plugins
+
+commit 970f7f16848995764c5a6e8dd9914bd02b89a407
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 21:04:40 2022 -0500
+
+    Mise a jour des commits
+
+commit 81cb22e93f7458c012e5039a17692cf285e0d751
 Author: Benoit Massé <ben.masse@abcdn.qc.ca>
 Date:   Fri Jan 21 21:03:19 2022 -0500
 
     Supprime des #if conditionnal inutile
-    
-commit 6697fa536ed6780e918b237fe1d185d9150b173a (HEAD -> b/Test_nettoiyer_le_tout)
+
+commit 6697fa536ed6780e918b237fe1d185d9150b173a
 Author: Benoit Massé <ben.masse@abcdn.qc.ca>
 Date:   Fri Jan 21 17:10:53 2022 -0500
 
@@ -208,11 +232,10 @@ commit ad7d0f14665a97793a48d529b1e9fc24998bf3ed
 Author: Benoit Massé <ben.masse@abcdn.qc.ca>
 Date:   Fri Jan 21 17:05:13 2022 -0500
 
-    Mise à jour de la document interne de mes changements
-
 *******************
 Référence dans ce document à 1.3 Supprimer la compilation de mosquitto (src) et apps et pluging qui utilise WITH_BROKER ou ne sont pas utile
 *******************
+
 Author: Benoit Massé <ben.masse@abcdn.qc.ca>
 Date:   Fri Jan 21 17:00:45 2022 -0500
 
