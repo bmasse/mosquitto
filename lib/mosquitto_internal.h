@@ -219,7 +219,12 @@ struct mosquitto {
 #endif
 	mosq_sock_t sock;
 #ifndef WITH_BROKER
+//#error avec ifndef WITH_BROKER
 	mosq_sock_t sockpairR, sockpairW;
+#else 
+#ifndef DB_DUMP_H
+#error avec ifdef WITH_BROKER
+#endif
 #endif
 	uint32_t maximum_packet_size;
 #if defined(__GLIBC__) && defined(WITH_ADNS)

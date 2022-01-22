@@ -130,18 +130,6 @@ UI_METHOD *net__get_ui_method(void)
 
 int net__init(void)
 {
-#ifdef WIN32
-	WSADATA wsaData;
-	if(WSAStartup(MAKEWORD(2,2), &wsaData) != 0){
-		return MOSQ_ERR_UNKNOWN;
-	}
-#endif
-
-#ifdef WITH_SRV
-#error "Benoit est-ce utile ou pas WITH_SRV"
-	ares_library_init(ARES_LIB_INIT_ALL);
-#endif
-
 	return MOSQ_ERR_SUCCESS;
 }
 
@@ -164,16 +152,9 @@ void net__cleanup(void)
 	cleanup_ui_method();
 #endif
 
-#ifdef WITH_SRV
-	ares_library_cleanup();
-#endif
 
-#ifdef WIN32
-	WSACleanup();
-#endif
 }
 
-#ifdef WITH_TLS
 void net__init_tls(void)
 {
 	BTraceIn
@@ -201,7 +182,6 @@ BLog("NON OPENSSL_VERSION_NUMBER < 0x10100000L");
 	is_tls_initialized = true;
 	BTraceOut
 }
-#endif
 
 /* Close a socket associated with a context and set it to -1.
  * Returns 1 on failure (context is NULL)
@@ -211,6 +191,7 @@ int net__socket_close(struct mosquitto *mosq)
 {
 	int rc = 0;
 #ifdef WITH_BROKER
+//#error
 	struct mosquitto *mosq_found;
 #endif
 

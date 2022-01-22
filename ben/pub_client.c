@@ -232,105 +232,6 @@ int pub_shared_init(void)
 }
 
 
-static int pub_stdin_line_loop(struct mosquitto *mosq)
-{
-	char *buf2;
-	int buf_len_actual = 0;
-	int pos;
-	int rc = MOSQ_ERR_SUCCESS;
-	int read_len;
-	bool stdin_finished = false;
-
-	mosquitto_loop_start(mosq);
-	stdin_finished = false;
-	do{
-		if(status == STATUS_CONNECTING){
-#ifdef WIN32
-			Sleep(100);
-#else
-			struct timespec ts;
-			ts.tv_sec = 0;
-			ts.tv_nsec = 100000000;
-			nanosleep(&ts, NULL);
-#endif
-		}
-
-		if(status == STATUS_NOHOPE){
-			return MOSQ_ERR_CONN_REFUSED;
-		}
-
-		if(status == STATUS_CONNACK_RECVD){
-			pos = 0;
-			read_len = line_buf_len;
-			while(status == STATUS_CONNACK_RECVD && fgets(&line_buf[pos], read_len, stdin)){
-				buf_len_actual = (int )strlen(line_buf);
-				if(line_buf[buf_len_actual-1] == '\n'){
-					line_buf[buf_len_actual-1] = '\0';
-					rc = my_publish(mosq, &mid_sent, cfg.topic, buf_len_actual-1, line_buf, cfg.qos, cfg.retain);
-					pos = 0;
-					if(rc != MOSQ_ERR_SUCCESS && rc != MOSQ_ERR_NO_CONN){
-						return rc;
-					}
-					break;
-				}else{
-					line_buf_len += 1024;
-					pos += read_len-1;
-					read_len = 1024;
-					buf2 = realloc(line_buf, (size_t )line_buf_len);
-					if(!buf2){
-						err_printf(&cfg, "Error: Out of memory.\n");
-						return MOSQ_ERR_NOMEM;
-					}
-					line_buf = buf2;
-				}
-			}
-			if(pos != 0){
-				rc = my_publish(mosq, &mid_sent, cfg.topic, buf_len_actual, line_buf, cfg.qos, cfg.retain);
-				if(rc){
-					if(cfg.qos>0) return rc;
-				}
-			}
-			if(feof(stdin)){
-				if(mid_sent == -1){
-					/* Empty file */
-					mosquitto_disconnect_v5(mosq, 0, cfg.disconnect_props);
-					disconnect_sent = true;
-					status = STATUS_DISCONNECTING;
-				}else{
-					last_mid = mid_sent;
-					status = STATUS_WAITING;
-				}
-				stdin_finished = true;
-			}else if(status == STATUS_DISCONNECTED){
-				/* Not end of stdin, so we've lost our connection and must
-				 * reconnect */
-			}
-		}
-
-		if(status == STATUS_WAITING){
-			if(last_mid_sent == last_mid && disconnect_sent == false){
-				mosquitto_disconnect_v5(mosq, 0, cfg.disconnect_props);
-				disconnect_sent = true;
-			}
-#ifdef WIN32
-			Sleep(100);
-#else
-			struct timespec ts;
-			ts.tv_sec = 0;
-			ts.tv_nsec = 100000000;
-			nanosleep(&ts, NULL);
-#endif
-		}
-	}while(stdin_finished == false);
-	mosquitto_loop_stop(mosq, false);
-
-	if(status == STATUS_DISCONNECTED){
-		return MOSQ_ERR_SUCCESS;
-	}else{
-		return rc;
-	}
-}
-
 
 static int pub_other_loop(struct mosquitto *mosq)
 {
@@ -340,7 +241,7 @@ static int pub_other_loop(struct mosquitto *mosq)
 	if(cfg.repeat_count > 1 && (cfg.repeat_delay.tv_sec == 0 || cfg.repeat_delay.tv_usec != 0)){
 		loop_delay = (int )cfg.repeat_delay.tv_usec / 2000;
 	}
-
+	sleep(3);
 	do{
 		rc = mosquitto_loop(mosq, loop_delay, 1);
 		if(ready_for_repeat && check_repeat_time()){
@@ -371,11 +272,7 @@ static int pub_other_loop(struct mosquitto *mosq)
 
 int pub_shared_loop(struct mosquitto *mosq)
 {
-	if(cfg.pub_mode == MSGMODE_STDIN_LINE){
-		return pub_stdin_line_loop(mosq);
-	}else{
-		return pub_other_loop(mosq);
-	}
+	return pub_other_loop(mosq);
 }
 
 
@@ -516,7 +413,7 @@ int main(int argc, char *argv[])
 	struct mosquitto *mosq = NULL;
 	int rc;
 
-	mosquitto_lib_init();
+	mosquitto_lib_init();  // Rien d'interressent
 
 	if(pub_shared_init()) return 1;
 

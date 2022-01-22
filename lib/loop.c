@@ -100,6 +100,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 #endif
 	}
 	if(mosq->sockpairR != INVALID_SOCKET){
+		BLog("mosq->sockpairR");
 		/* sockpairR is used to break out of select() before the timeout, on a
 		 * call to publish() etc. */
 		FD_SET(mosq->sockpairR, &readfds);
