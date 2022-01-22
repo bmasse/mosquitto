@@ -5,6 +5,10 @@
 
 2.1 Ce qui fonctionne
 
+Questions
+3.1 Pourquoi les fonctions ui_method ??? 
+
+
 /******************************************************************************
     1.1 Test avec 1883, 1884, 8883 et 8884
  ******************************************************************************/
@@ -314,3 +318,9 @@ Author: Benoit Massé <ben.masse@abcdn.qc.ca>
 Date:   Fri Jan 21 21:28:38 2022 -0500
 
     Mise a jour de Benoit.Mosquitto.Info.txt section git log
+
+
+/******************************************************************************
+    3.1 Pourquoi les fonctions ui_method ??? 
+ ******************************************************************************/
+Elles semblent seulement dans le mode TLS, est-ce pour le serveur ou bien pour le client ou bien pour les deux ?
