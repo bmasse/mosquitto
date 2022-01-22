@@ -6,11 +6,16 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [
-                "WITH_TLS=1",
+                "WITH_TLS",
                 "WITH_THREADING",
                 "HAVE_PSELECT",
+                "WITH_SOCKS",
+                "WITH_TLS_PSK",
+                "WITH_THREADING",
+                "WITH_UNIX_SOCKETS",
 
-                "NON_WITH_SRV"
+                "NON_WITH_SRV",
+                "NON_WITH_BROKER"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
