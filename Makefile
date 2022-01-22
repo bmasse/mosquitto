@@ -1,6 +1,6 @@
 include config.mk
 
-DIRS=lib client ben
+DIRS=lib ben
 DOCDIRS=man
 DISTDIRS=man
 DISTFILES= \
