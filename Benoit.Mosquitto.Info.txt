@@ -184,6 +184,31 @@ Changement dans ./Makefile
 /******************************************************************************
     1.4 Git commits
  ******************************************************************************/
+ commit 81cb22e93f7458c012e5039a17692cf285e0d751 (HEAD -> b/Test_nettoiyer_le_tout)
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 21:03:19 2022 -0500
+
+    Supprime des #if conditionnal inutile
+    
+commit 6697fa536ed6780e918b237fe1d185d9150b173a (HEAD -> b/Test_nettoiyer_le_tout)
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 17:10:53 2022 -0500
+
+    VSCODE settings.json, files.excludes
+    
+    Ajout des fichiers a ne pas inclure dans files.excludes
+
+commit 1b0601b73a2832b82f533eed62e8d0969d3bbd00
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 17:08:07 2022 -0500
+
+    Mise a jour de .gitignore avec libmosquitto.pc et libmosquittopp.pc
+
+commit ad7d0f14665a97793a48d529b1e9fc24998bf3ed
+Author: Benoit Massé <ben.masse@abcdn.qc.ca>
+Date:   Fri Jan 21 17:05:13 2022 -0500
+
+    Mise à jour de la document interne de mes changements
 
 *******************
 Référence dans ce document à 1.3 Supprimer la compilation de mosquitto (src) et apps et pluging qui utilise WITH_BROKER ou ne sont pas utile
