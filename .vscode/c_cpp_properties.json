@@ -13,6 +13,8 @@
                 "WITH_TLS_PSK",
                 "WITH_THREADING",
                 "WITH_UNIX_SOCKETS",
+                "SSL_MODE_RELEASE_BUFFERS",
+                "SSL_OP_NO_TLSv1_3",
 
                 "NON_WITH_SRV",
                 "NON_WITH_BROKER"
