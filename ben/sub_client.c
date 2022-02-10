@@ -50,6 +50,7 @@ bool connack_received = false;
 #ifndef WIN32
 static void my_signal_handler(int signum)
 {
+	BTraceIn
 	if(signum == SIGALRM || signum == SIGTERM || signum == SIGINT){
 		if(connack_received){
 			process_messages = false;
@@ -72,7 +73,7 @@ static void my_message_callback(struct mosquitto *mosq, void *obj, const struct 
 
 	UNUSED(obj);
 	UNUSED(properties);
-
+	BTraceIn
 	if(process_messages == false) return;
 
 	if(cfg.retained_only && !message->retain && process_messages){
@@ -118,7 +119,7 @@ static void my_connect_callback(struct mosquitto *mosq, void *obj, int result, i
 	UNUSED(obj);
 	UNUSED(flags);
 	UNUSED(properties);
-
+	BTraceIn
 	connack_received = true;
 
 	connack_result = result;
@@ -150,7 +151,7 @@ static void my_subscribe_callback(struct mosquitto *mosq, void *obj, int mid, in
 	bool some_sub_allowed = (granted_qos[0] < 128);
 	bool should_print = cfg.debug && !cfg.quiet;
 	UNUSED(obj);
-
+	BTraceIn
 	if(should_print) printf("Subscribed (mid: %d): %d", mid, granted_qos[0]);
 	for(i=1; i<qos_count; i++){
 		if(should_print) printf(", %d", granted_qos[i]);

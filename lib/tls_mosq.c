@@ -50,12 +50,13 @@ int mosquitto__server_certificate_verify(int preverify_ok, X509_STORE_CTX *ctx)
 	struct mosquitto *mosq;
 	SSL *ssl;
 	X509 *cert;
-
+	BTraceIn
 	/* Always reject if preverify_ok has failed. */
 	if(!preverify_ok) return 0;
 
 	ssl = X509_STORE_CTX_get_ex_data(ctx, SSL_get_ex_data_X509_STORE_CTX_idx());
 	mosq = SSL_get_ex_data(ssl, tls_ex_index_mosq);
+	BLog("tls_ex_index_mosq = %d", tls_ex_index_mosq);
 	if(!mosq) return 0;
 
 	if(mosq->tls_insecure == false
@@ -63,6 +64,7 @@ int mosquitto__server_certificate_verify(int preverify_ok, X509_STORE_CTX *ctx)
 			&& mosq->port != 0 /* no hostname checking for unix sockets */
 #endif
 			){
+				BTraceIn
 		if(X509_STORE_CTX_get_error_depth(ctx) == 0){
 			/* FIXME - use X509_check_host() etc. for sufficiently new openssl (>=1.1.x) */
 			cert = X509_STORE_CTX_get_current_cert(ctx);

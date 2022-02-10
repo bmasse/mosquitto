@@ -100,11 +100,11 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 #endif
 	}
 	if(mosq->sockpairR != INVALID_SOCKET){
-		BLog("mosq->sockpairR");
 		/* sockpairR is used to break out of select() before the timeout, on a
 		 * call to publish() etc. */
 		FD_SET(mosq->sockpairR, &readfds);
 		if((int)mosq->sockpairR > maxfd){
+			BLog("mosq->sockpairR");
 			maxfd = mosq->sockpairR;
 		}
 	}
@@ -127,6 +127,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 
 	local_timeout.tv_sec = timeout_ms/1000;
 #ifdef HAVE_PSELECT
+//#error "HAVE_PSELECT is defined"
 	local_timeout.tv_nsec = (timeout_ms-local_timeout.tv_sec*1000)*1000000;
 #else
 	local_timeout.tv_usec = (timeout_ms-local_timeout.tv_sec*1000)*1000;
@@ -157,6 +158,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 			if(mosq->sockpairR != INVALID_SOCKET && FD_ISSET(mosq->sockpairR, &readfds)){
 #ifndef WIN32
 				if(read(mosq->sockpairR, &pairbuf, 1) == 0){
+					BLog("FD_ISSET read for sockpairR");
 				}
 #else
 				recv(mosq->sockpairR, &pairbuf, 1, 0);
@@ -268,6 +270,7 @@ int mosquitto_loop_forever(struct mosquitto *mosq, int timeout, int max_packets)
 			pthread_testcancel();
 #endif
 			rc = mosquitto_loop(mosq, timeout, max_packets);
+			BLog("do while mosquitto_loop rc = %d, run = %d", rc, run);
 		}while(run && rc == MOSQ_ERR_SUCCESS);
 		/* Quit after fatal errors. */
 		switch(rc){

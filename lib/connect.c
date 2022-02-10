@@ -235,11 +235,13 @@ static int mosquitto__reconnect(struct mosquitto *mosq, bool blocking)
 
 int mosquitto_disconnect(struct mosquitto *mosq)
 {
+	BTraceIn
 	return mosquitto_disconnect_v5(mosq, 0, NULL);
 }
 
 int mosquitto_disconnect_v5(struct mosquitto *mosq, int reason_code, const mosquitto_property *properties)
 {
+	BTraceIn
 	const mosquitto_property *outgoing_properties = NULL;
 	mosquitto_property local_property;
 	int rc;

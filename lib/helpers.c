@@ -53,7 +53,7 @@ static void on_message_callback(struct mosquitto *mosq, void *obj, const struct 
 {
 	int rc;
 	struct userdata__callback *userdata = obj;
-
+	BTraceIn
 	rc = userdata->callback(mosq, userdata->userdata, message);
 	if(rc){
 		mosquitto_disconnect(mosq);
@@ -64,7 +64,7 @@ static int on_message_simple(struct mosquitto *mosq, void *obj, const struct mos
 {
 	struct userdata__simple *userdata = obj;
 	int rc;
-
+	BTraceIn
 	if(userdata->max_msg_count == 0){
 		return 0;
 	}

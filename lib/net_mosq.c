@@ -408,6 +408,7 @@ static void net__print_ssl_error(struct mosquitto *mosq)
 	e = ERR_get_error();
 	while(e){
 		log__printf(mosq, MOSQ_LOG_ERR, "OpenSSL Error[%d]: %s", num, ERR_error_string(e, ebuf));
+		BLog("OpenSSL Error[%d]: %s", num, ERR_error_string(e, ebuf));
 		e = ERR_get_error();
 		num++;
 	}
@@ -776,18 +777,21 @@ int net__socket_connect(struct mosquitto *mosq, const char *host, uint16_t port,
 static int net__handle_ssl(struct mosquitto* mosq, int ret)
 {
 	int err;
-
+	BTraceIn
 	err = SSL_get_error(mosq->ssl, ret);
 	if (err == SSL_ERROR_WANT_READ) {
+		BLog("READ");
 		ret = -1;
 		errno = EAGAIN;
 	}
 	else if (err == SSL_ERROR_WANT_WRITE) {
+		BLog("WRITE");
 		ret = -1;
 		mosq->want_write = true;
 		errno = EAGAIN;
 	}
 	else {
+		BLog("ELSE");
 		net__print_ssl_error(mosq);
 		errno = EPROTO;
 	}
@@ -798,6 +802,7 @@ static int net__handle_ssl(struct mosquitto* mosq, int ret)
 
 ssize_t net__read(struct mosquitto *mosq, void *buf, size_t count)
 {
+	BTraceIn
 	int ret;
 	assert(mosq);
 	errno = 0;
@@ -817,12 +822,14 @@ ssize_t net__write(struct mosquitto *mosq, const void *buf, size_t count)
 {
 	int ret;
 	assert(mosq);
-
+	BTraceIn
 	errno = 0;
 	if(mosq->ssl){
+
 		mosq->want_write = false;
 		ret = SSL_write(mosq->ssl, buf, (int)count);
 		if(ret < 0){
+
 			ret = net__handle_ssl(mosq, ret);
 		}
 		return (ssize_t )ret;
@@ -837,6 +844,7 @@ int net__socket_nonblock(mosq_sock_t *sock)
 {
 	int opt;
 	/* Set non-blocking */
+	BTraceIn
 	opt = fcntl(*sock, F_GETFL, 0);
 	if(opt == -1){
 		COMPAT_CLOSE(*sock);
@@ -855,6 +863,7 @@ int net__socket_nonblock(mosq_sock_t *sock)
 
 int net__socketpair(mosq_sock_t *pairR, mosq_sock_t *pairW)
 {
+	BTraceIn
 	int sv[2];
 
 	*pairR = INVALID_SOCKET;
