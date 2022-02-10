@@ -8,6 +8,8 @@
 Questions
 3.1 Pourquoi les fonctions ui_method ??? 
 
+4.1 Test avec un serveur sur 192.168.2.34 keepalive
+
 
 /******************************************************************************
     1.1 Test avec 1883, 1884, 8883 et 8884
@@ -324,3 +326,29 @@ Date:   Fri Jan 21 21:28:38 2022 -0500
     3.1 Pourquoi les fonctions ui_method ??? 
  ******************************************************************************/
 Elles semblent seulement dans le mode TLS, est-ce pour le serveur ou bien pour le client ou bien pour les deux ?
+
+
+/******************************************************************************
+    3.2 mosquitto_sub se reconnecte tout les x temps pourquoi ?
+ ******************************************************************************/
+Benoit:loop.c:mosquitto_loop_forever(271): do while mosquitto_loop rc = 0, run = 1
+Benoit:loop.c:mosquitto_loop(103): mosq->sockpairR
+Benoit:net_mosq.c:net__read(805):In 
+Benoit:net_mosq.c:net__handle_ssl(780):In 
+Benoit:net_mosq.c:net__handle_ssl(794): ELSE
+Benoit:loop.c:mosquitto_loop_forever(271): do while mosquitto_loop rc = 7, run = 1
+Benoit:loop.c:mosquitto_loop_forever(326): 
+Benoit:connect.c:mosquitto__reconnect(163):In 
+
+ ./mosquitto_sub -h test.mosquitto.org -t "device/20:4c:03:90:e0:56/#"  -q 1 --tls-alpn  "x-amzn-mqtt-ca" -p 8884 --cafile ../CA/mosquitto.org.crt --key ../CA/client.key --cert ../CA/client.crt.txt
+
+
+
+
+/******************************************************************************
+    4.1 Test avec un serveur sur 192.168.2.34 keepalive
+ ******************************************************************************/
+./mosquitto_sub -h test001 -t "lwmqtt/" -k 5  --cafile /data/ca.crt.192.168.2.34.mosquitto -d --insecure
+
+./mosquitto_pub -h test001 -t "lwmqtt/"  -q 1 -m "allo1234"  -p 8883 --cafile /data/ca.crt.192.168.2.34.mosquitto --insecure  --tls-version tlsv1.2 -d
+./mosquitto_sub -h test001 -t "lwmqtt/" -k 5  --cafile /data/ca.crt.192.168.2.34.mosquitto -d --insecure -p 8883
