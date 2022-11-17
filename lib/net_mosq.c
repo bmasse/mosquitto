@@ -86,36 +86,26 @@ static bool is_tls_initialized = false;
 /* Functions taken from OpenSSL s_server/s_client */
 static int ui_open(UI *ui)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return UI_method_get_opener(UI_OpenSSL())(ui);
 }
 
 static int ui_read(UI *ui, UI_STRING *uis)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return UI_method_get_reader(UI_OpenSSL())(ui, uis);
 }
 
 static int ui_write(UI *ui, UI_STRING *uis)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return UI_method_get_writer(UI_OpenSSL())(ui, uis);
 }
 
 static int ui_close(UI *ui)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return UI_method_get_closer(UI_OpenSSL())(ui);
 }
 
 static void setup_ui_method(void)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	_ui_method = UI_create_method("OpenSSL application user interface");
 	UI_method_set_opener(_ui_method, ui_open);
 	UI_method_set_reader(_ui_method, ui_read);
@@ -125,8 +115,6 @@ static void setup_ui_method(void)
 
 static void cleanup_ui_method(void)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	if(_ui_method){
 		UI_destroy_method(_ui_method);
 		_ui_method = NULL;
@@ -135,8 +123,6 @@ static void cleanup_ui_method(void)
 
 UI_METHOD *net__get_ui_method(void)
 {
-	BTraceIn
-	BLog("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	return _ui_method;
 }
 
@@ -178,7 +164,7 @@ static void net__init_tls(void)
 			| OPENSSL_INIT_ADD_ALL_DIGESTS \
 			| OPENSSL_INIT_LOAD_CONFIG, NULL);
 #  endif
-	setup_ui_method();
+	//setup_ui_method();
 	if(tls_ex_index_mosq == -1){
 		tls_ex_index_mosq = SSL_get_ex_new_index(0, "client context", NULL, NULL, NULL);
 	}
@@ -732,13 +718,16 @@ int net__socket_connect_step3(struct mosquitto *mosq, const char *host)
 			BLog("MOSQ_ERR_TLS");
 			return MOSQ_ERR_TLS;
 		}
-
-		if(net__socket_connect_tls(mosq)){
-			net__socket_close(mosq);
-			BLog("MOSQ_ERR_TLS");
-			return MOSQ_ERR_TLS;
-		}
-
+		do {
+			if(net__socket_connect_tls(mosq)){
+				net__socket_close(mosq);
+				BLog("MOSQ_ERR_TLS");
+				return MOSQ_ERR_TLS;
+			}
+			if (mosq->want_connect == false)
+				break;
+			sleep(1);
+		} while (1);
 	}
 	BTraceOut
 	return MOSQ_ERR_SUCCESS;
@@ -868,7 +857,7 @@ int net__socketpair(mosq_sock_t *pairR, mosq_sock_t *pairW)
 
 	*pairR = INVALID_SOCKET;
 	*pairW = INVALID_SOCKET;
-
+#if BEN_SUPPRIME_PAIR
 	if(socketpair(AF_UNIX, SOCK_STREAM, 0, sv) == -1){
 		return MOSQ_ERR_ERRNO;
 	}
@@ -882,6 +871,8 @@ int net__socketpair(mosq_sock_t *pairR, mosq_sock_t *pairW)
 	}
 	*pairR = sv[0];
 	*pairW = sv[1];
+#endif // #if BEN_SUPPRIME_PAIR
+
 	return MOSQ_ERR_SUCCESS;
 }
 

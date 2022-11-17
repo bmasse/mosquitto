@@ -158,7 +158,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 			if(mosq->sockpairR != INVALID_SOCKET && FD_ISSET(mosq->sockpairR, &readfds)){
 #ifndef WIN32
 				if(read(mosq->sockpairR, &pairbuf, 1) == 0){
-					BLog("FD_ISSET read for sockpairR");
+					BLog("FD_ISSET read for sockpairR -----------------------------------------------");
 				}
 #else
 				recv(mosq->sockpairR, &pairbuf, 1, 0);
@@ -172,7 +172,7 @@ int mosquitto_loop(struct mosquitto *mosq, int timeout, int max_packets)
 			if(mosq->sock != INVALID_SOCKET && FD_ISSET(mosq->sock, &writefds)){
 #ifdef WITH_TLS
 				if(mosq->want_connect){
-					BLog("Loop call net__socket_connect_tls");
+					BLog("Loop call net__socket_connect_tls -----------------------------------------");
 					rc = net__socket_connect_tls(mosq);
 					if(rc) return rc;
 				}else
@@ -270,7 +270,7 @@ int mosquitto_loop_forever(struct mosquitto *mosq, int timeout, int max_packets)
 			pthread_testcancel();
 #endif
 			rc = mosquitto_loop(mosq, timeout, max_packets);
-			BLog("do while mosquitto_loop rc = %d, run = %d", rc, run);
+			//BLog("do while mosquitto_loop rc = %d, run = %d", rc, run);
 		}while(run && rc == MOSQ_ERR_SUCCESS);
 		/* Quit after fatal errors. */
 		switch(rc){
@@ -379,7 +379,7 @@ int mosquitto_loop_read(struct mosquitto *mosq, int max_packets)
 
 #ifdef WITH_TLS
 	if(mosq->want_connect){
-		BLog("Loop call net__socket_connect_tls");
+		BLog("Loop call net__socket_connect_tls -------------------------------------");
 		rc = net__socket_connect_tls(mosq);
 		if (MOSQ_ERR_TLS == rc){
 			rc = mosquitto__loop_rc_handle(mosq, rc);
@@ -407,6 +407,7 @@ int mosquitto_loop_read(struct mosquitto *mosq, int max_packets)
 		}else
 #endif
 		{
+			BLog("Packet read --- ");
 			rc = packet__read(mosq);
 		}
 		if(rc || errno == EAGAIN || errno == COMPAT_EWOULDBLOCK){

@@ -240,14 +240,14 @@ int packet__write(struct mosquitto *mosq)
 	state = mosquitto__get_state(mosq);
 #if defined(WITH_TLS) && !defined(WITH_BROKER)
 	if(state == mosq_cs_connect_pending || mosq->want_connect){
-		printf("Benoit: state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d\n", state, mosq_cs_connect_pending, mosq->want_connect);
+		BLog("state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d", state, mosq_cs_connect_pending, mosq->want_connect);
 #else
 	if(state == mosq_cs_connect_pending){
 #endif
 		pthread_mutex_unlock(&mosq->current_out_packet_mutex);
 		return MOSQ_ERR_SUCCESS;
 	}
-	printf("Benoit: state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d\n", state, mosq_cs_connect_pending, mosq->want_connect);
+	BLog("state = %d: mosq_cs_connect_pending %d, or mosq->want_connect %d", state, mosq_cs_connect_pending, mosq->want_connect);
 
 	while(mosq->current_out_packet){
 		packet = mosq->current_out_packet;
@@ -378,6 +378,7 @@ int packet__read(struct mosquitto *mosq)
 	 * Finally, free the memory and reset everything to starting conditions.
 	 */
 	if(!mosq->in_packet.command){
+		BLog("Read from packet read -----");
 		read_length = net__read(mosq, &byte, 1);
 		if(read_length == 1){
 			mosq->in_packet.command = byte;
